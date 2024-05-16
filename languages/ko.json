@@ -1,0 +1,58 @@
+{
+    "admin": {
+        "contexts": {
+            "manuals": "매뉴얼관리"
+        },
+        "permission": "열람권한",
+        "manuals": {
+            "add": "매뉴얼추가",
+            "edit": "매뉴얼수정",
+            "delete": "매뉴얼삭제",
+            "delete_confirm": "선택한 매뉴얼을 삭제하시겠습니까?<br>해당 매뉴얼의 모든 문서가 함께 삭제됩니다.",
+            "manual_id": "매뉴얼고유값",
+            "title": "매뉴얼명"
+        },
+        "categories": {
+            "add": "분류추가",
+            "edit": "분류수정",
+            "delete": "분류삭제",
+            "delete_confirm": "선택한 분류를 삭제하시겠습니까?<br>해당 분류의 모든 문서가 함께 삭제됩니다.",
+            "category_id": "분류고유값",
+            "title": "분류명",
+            "has_version": "버전사용",
+            "has_version_help": "버전별 문서를 제공합니다."
+        },
+        "contents": {
+            "add": "목차추가",
+            "edit": "목차수정",
+            "delete": "목차삭제",
+            "delete_confirm": "선택한 목차를 삭제하시겠습니까?<br>해당 목차의 모든 문서가 함께 삭제됩니다.",
+            "title": "목차명",
+            "parent_id": "상위목차",
+            "documents": "문서",
+            "hits": "조회"
+        },
+        "documents": {
+            "add": "문서추가",
+            "edit": "문서수정",
+            "delete": "문서삭제",
+            "delete_confirm": "선택한 문서를 삭제하시겠습니까?",
+            "start_version": "최소",
+            "end_version": "최대",
+            "author": "작성자",
+            "hits": "조회"
+        },
+        "versions": {
+            "versions": "버전정보",
+            "range_start": "이상",
+            "range_end": "이하",
+            "range_help": "현재 문서가 노출될 버전을 입력합니다.<br>버전은 1.0 또는 1.999 등의 형식으로 입력할 수 있으며 입력한 버전범위에 해당하는 문서는 유일하여야 합니다.",
+            "all_version": "모든버전"
+        }
+    },
+    "errors": {
+        "DUPLICATED_ALL_VERSION": "다른 버전의 문서가 존재합니다. 다른 버전의 문서를 먼저 삭제하신 후 모든버전의 문서를 저장할 수 있습니다.",
+        "DUPLICATED_VERSION": "${versions} 버전문서와 버전의 범위가 중복됩니다.",
+        "INVALID_VERSION": "버전은 1.x 형태만 입력가능하며, 소숫점 이하 3자리만 가능합니다."
+    }
+}
