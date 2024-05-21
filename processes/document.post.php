@@ -171,7 +171,7 @@ if (count($errors) == 0) {
         if ($document->start_version !== $start_version) {
             $attachments = $mAttachment->getAttachments(
                 $me,
-                'manual.document',
+                'document',
                 $document->content_id . '.' . $document->start_version
             );
             foreach ($attachments as $attachment) {
@@ -185,13 +185,7 @@ if (count($errors) == 0) {
     /**
      * @var \modules\attachment\Attachment $mAttachment
      */
-    $mAttachment->moveFiles(
-        $content->getAttachments(),
-        $me,
-        'manual.document',
-        $content_id . '.' . $start_version,
-        true
-    );
+    $mAttachment->moveFiles($content->getAttachments(), $me, 'document', $content_id . '.' . $start_version, true);
 
     $results->success = true;
 } else {

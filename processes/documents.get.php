@@ -30,13 +30,16 @@ if ($me->getAdmin()->checkPermission('manuals') == false) {
 $mMember = Modules::get('member');
 
 $content_id = Request::get('content_id', true);
+$version = Request::getInt('version') ?? -1;
 $records = $me
     ->db()
     ->select()
     ->from($me->table('documents'))
-    ->where('content_id', $content_id)
-    ->orderBy('start_version', 'desc')
-    ->get();
+    ->where('content_id', $content_id);
+if ($version !== -1) {
+    $records->where('start_version', $version, '<=')->where('end_version', $version, '>');
+}
+$records = $records->orderBy('start_version', 'desc')->get();
 foreach ($records as &$record) {
     $record->author = $mMember->getMember($record->member_id)->getJson();
 }
