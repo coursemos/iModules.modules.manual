@@ -2,7 +2,7 @@
 /**
  * 이 파일은 아이모듈 매뉴얼모듈의 일부입니다. (https://www.imodules.io)
  *
- * 매뉴얼분류 정렬을 저장한다.
+ * 분류 정렬을 저장한다.
  *
  * @file /modules/manual/processes/categories.patch.php
  * @author Arzz <arzz@arzz.com>

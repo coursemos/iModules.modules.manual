@@ -2,7 +2,7 @@
 /**
  * 이 파일은 아이모듈 매뉴얼모듈의 일부입니다. (https://www.imodules.io)
  *
- * 카테고리를 저장한다.
+ * 분류를 저장한다.
  *
  * @file /modules/manual/processes/category.post.php
  * @author Arzz <arzz@arzz.com>
@@ -49,6 +49,25 @@ $insert['manual_id'] = $manual_id;
 $insert['title'] = Input::get('title', $errors);
 $insert['permission'] = Input::get('permission', $errors);
 $insert['has_version'] = Input::get('has_version') ? 'TRUE' : 'FALSE';
+if ($insert['has_version'] == 'TRUE') {
+    $versions = array_values(array_filter(explode("\n", Input::get('versions') ?? '')));
+    if (count($versions) == 0) {
+        $errors['versions'] = $me->getErrorText('REQUIRED');
+    } else {
+        foreach ($versions as &$version) {
+            $version = $me->getVersionToInt($version);
+            if ($version == 0) {
+                $errors['versions'] = $me->getErrorText('INVALID_VERSION');
+                break;
+            }
+        }
+
+        sort($versions);
+        $versions = array_reverse($versions);
+
+        $insert['versions'] = implode("\n", $versions);
+    }
+}
 
 if (count($errors) == 0) {
     if ($category == null) {
