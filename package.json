@@ -71,6 +71,11 @@
                     "default": "FALSE",
                     "comment": "문서버전여부"
                 },
+                "versions": {
+                    "type": "text",
+                    "is_null": true,
+                    "comment": "버전정보"
+                },
                 "sort": {
                     "type": "int",
                     "comment": "정렬"
@@ -108,6 +113,12 @@
                     "length": 36,
                     "is_null": true,
                     "comment": "상위목차고유값"
+                },
+                "hash": {
+                    "type": "char",
+                    "length": 32,
+                    "is_null": true,
+                    "comment": "콘텐츠해시"
                 },
                 "title": {
                     "type": "varchar",
