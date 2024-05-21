@@ -173,6 +173,20 @@ namespace modules {
                                             name: 'has_version',
                                             label: this.printText('admin.categories.has_version'),
                                             boxLabel: this.printText('admin.categories.has_version_help'),
+                                            listeners: {
+                                                change: (field, checked) => {
+                                                    field.getForm().getField('versions').setHidden(!checked);
+                                                    field.getForm().getField('versions').setDisabled(!checked);
+                                                },
+                                            },
+                                        }),
+                                        new Aui.Form.Field.TextArea({
+                                            name: 'versions',
+                                            label: this.printText('admin.versions.versions'),
+                                            emptyText: '1.0<br>100.999',
+                                            helpText: this.printText('admin.versions.versions_help'),
+                                            hidden: true,
+                                            disabled: true,
                                         }),
                                     ],
                                 }),
@@ -448,6 +462,50 @@ namespace modules {
                                         }),
                                         new Aui.Form.Field.Editor({
                                             name: 'content',
+                                            listeners: {
+                                                editorRender: (editor) => {
+                                                    /*
+                                                    editor.$getEditor().atwho({
+                                                        at: '@',
+                                                        data: [
+                                                            'Jacob',
+                                                            'Isabella',
+                                                            'Ethan',
+                                                            'Emma',
+                                                            'Michael',
+                                                            'Olivia',
+                                                            'Alexander',
+                                                            'Sophia',
+                                                            'William',
+                                                            'Ava',
+                                                            'Joshua',
+                                                            'Emily',
+                                                            'Daniel',
+                                                            'Madison',
+                                                            'Jayden',
+                                                            'Abigail',
+                                                            'Noah',
+                                                            'Chloe',
+                                                            '你好',
+                                                            '你你你',
+                                                        ],
+                                                        limit: 20,
+                                                        displayTpl:
+                                                            '<li data-midx="${midx}"><i style="background-image:url(${photo});"></i>${name}</li>',
+                                                        insertTpl: '@${name}',
+                                                    });
+
+                                                    editor.$getEditor().on('inserted.atwho', function (e, $li) {
+                                                        editor
+                                                            .$getEditor()
+                                                            .find('.atwho-inserted[data-atwho-at-query]')
+                                                            .attr('data-atwho-at-query', null)
+                                                            .addClass('fr-deletable')
+                                                            .attr('data-midx', $li.attr('data-midx'));
+                                                    });
+                                                    */
+                                                },
+                                            },
                                         }),
                                     ],
                                 }),
