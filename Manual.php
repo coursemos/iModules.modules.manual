@@ -75,6 +75,19 @@ class Manual extends \Module
      */
     public function getContext(string $manual_id, ?object $configs = null): string
     {
+        $content = $this->getManualContext($manual_id, $configs);
+        return $this->getTemplate()->getLayout($content);
+    }
+
+    /**
+     * 매뉴얼 컨텍스트를 가져온다.
+     *
+     * @param string $manual_id 매뉴얼고유값
+     * @param ?object $configs 컨텍스트 설정
+     * @return string $html
+     */
+    public function getManualContext(string $manual_id, ?object $configs = null): string
+    {
         $manual = $this->getManual($manual_id);
         if ($manual === null) {
             return \ErrorHandler::get($this->error('NOT_FOUND_MANUAL', $manual_id));
@@ -89,9 +102,59 @@ class Manual extends \Module
             $this->setTemplate($manual->getTemplateConfigs());
         }
 
-        $content = '';
+        $categories = $manual->getCategories();
+        $category_id = $this->getRouteAt(0) ?? null;
+        if ($category_id === null) {
+            if (count($categories) == 0) {
+                return \ErrorHandler::get($this->error('NOT_FOUND_MANUAL', $manual_id));
+            }
 
-        return $this->getTemplate()->getLayout($content);
+            $category_id = $categories[0]->getId();
+        }
+
+        $category = $this->getCategory($manual_id, $category_id);
+        if ($category === null) {
+            return \ErrorHandler::get($this->error('NOT_FOUND_CATEGORY', $manual_id));
+        }
+
+        $contents = $category->getContents();
+        $content_id = $this->getRouteAt(1) ?? null;
+        if ($content_id === null) {
+            foreach ($contents as $content) {
+                if ($content->isVisible($category->getLatestVersion()) == true) {
+                    $content_id = $content->getId();
+                    break;
+                }
+            }
+        }
+
+        $content = $category->getContent($content_id);
+        if ($content === null) {
+            return \ErrorHandler::get($this->error('NOT_FOUND_CONTENT', $manual_id));
+        }
+
+        $versions = $category->getVersions();
+        $version = -1;
+        if ($category->hasVersion() == true) {
+            $version = $this->getRouteAt(2)
+                ? $this->getVersionToInt($this->getRouteAt(2))
+                : $category->getLatestVersion();
+        }
+
+        if (in_array($version, $versions) == false) {
+            return \ErrorHandler::get($this->error('NOT_FOUND_VERSION', $manual_id));
+        }
+
+        $document = $content->getDocument($version);
+
+        $template = $this->getTemplate();
+        $template->assign('manual', $manual);
+        $template->assign('category', $category);
+        $template->assign('content', $content);
+        $template->assign('version', $version);
+        $template->assign('document', $document);
+
+        return $template->getContext('manual');
     }
 
     /**
