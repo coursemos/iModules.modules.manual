@@ -22,8 +22,8 @@ Admin.ready(async () => {
             new Aui.Grid.Panel({
                 id: 'manuals',
                 border: [false, true, false, false],
-                width: 280,
-                minWidth: 280,
+                width: 240,
+                minWidth: 240,
                 maxWidth: 400,
                 resizable: [false, true, false, false],
                 columnResizable: false,
@@ -128,8 +128,8 @@ Admin.ready(async () => {
             new Aui.Grid.Panel({
                 id: 'categories',
                 border: [false, true, false, true],
-                width: 280,
-                minWidth: 280,
+                width: 240,
+                minWidth: 240,
                 maxWidth: 400,
                 resizable: [false, true, false, false],
                 columnResizable: false,
@@ -265,11 +265,28 @@ Admin.ready(async () => {
                         if (selections.length == 1) {
                             const category_id = selections[0].get('category_id');
                             const manual_id = selections[0].get('manual_id');
+                            const has_version = selections[0].get('has_version');
+                            const versions = selections[0].get('versions');
                             contents.getStore().setParams({
                                 category_id: category_id,
                                 manual_id: manual_id,
+                                has_version: has_version == true ? 'TRUE' : 'FALSE',
+                                version: -1,
                             });
                             contents.getStore().reload();
+
+                            const select = contents.getToolbar('bottom').getItemAt(5) as Aui.Form.Field.Select;
+                            if (has_version == true) {
+                                select.getStore().empty();
+                                select.getStore().add(versions);
+                                select.setValue(-1);
+                                select.enable();
+                                select.show();
+                            } else {
+                                select.disable();
+                                select.hide();
+                            }
+
                             contents.enable();
 
                             Aui.getComponent('manuals-context').properties.setUrl();
@@ -282,8 +299,8 @@ Admin.ready(async () => {
             new Aui.Tree.Panel({
                 id: 'contents',
                 border: [false, true, false, true],
-                flex: 1,
-                minWidth: 400,
+                flex: 2,
+                minWidth: 380,
                 maxWidth: 500,
                 resizable: [false, true, false, false],
                 columnResizable: true,
@@ -352,6 +369,25 @@ Admin.ready(async () => {
                             tree.getStore().reload();
                         },
                     }),
+                    '->',
+                    new Aui.Form.Field.Select({
+                        width: 120,
+                        store: new Aui.Store.Local({
+                            fields: [{ name: 'value', type: 'int' }, 'display'],
+                            records: [],
+                        }),
+                        valueField: 'value',
+                        displayField: 'display',
+                        listeners: {
+                            change: (field, value) => {
+                                const grid = field.getParent().getParent() as Aui.Grid.Panel;
+                                if (grid.getStore().getParam('version') != value) {
+                                    grid.getStore().setParam('version', value);
+                                    grid.getStore().reload();
+                                }
+                            },
+                        },
+                    }),
                 ],
                 store: new Aui.TreeStore.Remote({
                     url: me.getProcessUrl('contents'),
@@ -368,11 +404,19 @@ Admin.ready(async () => {
                         text: (await me.getText('admin.contents.documents')) as string,
                         dataIndex: 'documents',
                         width: 60,
+                        textAlign: 'right',
+                        renderer: (value) => {
+                            return Format.number(value);
+                        },
                     },
                     {
                         text: (await me.getText('admin.contents.hits')) as string,
                         dataIndex: 'hits',
                         width: 75,
+                        textAlign: 'right',
+                        renderer: (value) => {
+                            return Format.number(value);
+                        },
                     },
                 ],
                 listeners: {
@@ -413,16 +457,18 @@ Admin.ready(async () => {
                             },
                         });
                     },
-                    selectionChange: (selections) => {
+                    selectionChange: (selections, tree) => {
                         const documents = Aui.getComponent('documents') as Aui.Grid.Panel;
                         if (selections.length == 1) {
                             const manual_id = selections[0].get('manual_id');
                             const category_id = selections[0].get('category_id');
                             const content_id = selections[0].get('content_id');
+                            const version = tree.getStore().getParam('version') ?? -1;
                             documents.getStore().setParams({
                                 manual_id: manual_id,
                                 category_id: category_id,
                                 content_id: content_id,
+                                version: version,
                             });
                             documents.getStore().reload();
                             documents.enable();
@@ -437,8 +483,8 @@ Admin.ready(async () => {
             new Aui.Grid.Panel({
                 id: 'documents',
                 border: [false, true, false, true],
-                minWidth: 300,
-                flex: 1,
+                minWidth: 280,
+                flex: 3,
                 columnResizable: false,
                 selection: { selectable: true },
                 disabled: true,
@@ -498,6 +544,15 @@ Admin.ready(async () => {
                             return (
                                 '<i class="photo" style="background-image:url(' + value.photo + ');"></i>' + value.name
                             );
+                        },
+                    },
+                    {
+                        text: (await me.getText('admin.documents.updated_at')) as string,
+                        dataIndex: 'updated_at',
+                        width: 145,
+                        textAlign: 'center',
+                        renderer: (value) => {
+                            return Format.date('Y.m.d(D) H:i', value);
                         },
                     },
                     {
