@@ -99,7 +99,7 @@ class Manual
 
         $this->_categories = [];
         foreach ($categories as $category) {
-            $this->_categories[] = $mManual->getCategory($category);
+            $this->_categories[] = new \modules\manual\dtos\Category($category);
         }
 
         return $this->_categories;
@@ -121,7 +121,7 @@ class Manual
             $url = $context->getUrl();
         } else {
             // 매뉴얼이 포함된 컨텍스트를 검색한다.
-            $context = \Contexts::findOne('MODULE', 'manual', $this->_id, [], ['category' => 0], false);
+            $context = \Contexts::findOne('MODULE', 'manual', $this->_id, [], ['category' => null], false);
             $url = $context == null ? '/' : $context->getUrl();
         }
 
