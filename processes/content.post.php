@@ -70,6 +70,17 @@ if (count($errors) == 0) {
             ->insert($me->table('contents'), $insert)
             ->execute();
     } else {
+        if ($content->parent_id != $parent_id) {
+            $insert['sort'] = $me
+                ->db()
+                ->select()
+                ->from($me->table('contents'))
+                ->where('manual_id', $manual_id)
+                ->where('category_id', $category_id)
+                ->where('parent_id', $parent_id)
+                ->count();
+        }
+
         $me->db()
             ->update($me->table('contents'), $insert)
             ->where('content_id', $content_id)

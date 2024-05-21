@@ -26,20 +26,14 @@ if ($me->getAdmin()->checkPermission('manuals') == false) {
 
 $manual_id = Request::get('manual_id', true);
 $category_id = Request::get('category_id', true);
+$version = Request::getInt('version') ?? -1;
 $is_root = Request::get('is_root') == 'TRUE';
-
-/**
- * @var \modules\naddle\momo\admin\Momo $mMomo
- */
-$mMomo = Modules::get('naddle/momo')->getAdmin();
-$mMomo->sync();
 
 /**
  * @var \modules\manual\admin\Manual $mAdmin
  */
 $mAdmin = $me->getAdmin();
-$records = $mAdmin->getContents($manual_id, $category_id, $is_root == true ? 2 : 3);
-
+$records = $mAdmin->getContents($manual_id, $category_id, $is_root, $version);
 if ($is_root == true) {
     $root =
         $me->getManual($manual_id)->getTitle() . ' (' . $me->getCategory($manual_id, $category_id)->getTitle() . ')';
