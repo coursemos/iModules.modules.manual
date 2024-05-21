@@ -71,17 +71,20 @@ class Manual extends \modules\admin\admin\Component
      *
      * @param string $manual_id 매뉴얼고유값
      * @param string $category_id 분류고유값
+     * @param bool $is_root 최상위 그룹 여부
      * @param ?string $version 버전명
      * @param ?string $parent_id 상위목차고유값
      */
     public function getContents(
         string $manual_id,
         string $category_id,
-        int $limit = 3,
+        bool $is_root,
+        ?int $version = null,
         int $depth = 0,
-        ?string $version = null,
         ?string $parent_id = null
     ): array {
+        $limit = $is_root == true ? 2 : 3;
+
         $contents = $this->db()
             ->select()
             ->from($this->table('contents'))
@@ -95,13 +98,27 @@ class Manual extends \modules\admin\admin\Component
                 $children = $this->getContents(
                     $manual_id,
                     $category_id,
-                    $limit,
-                    $depth + 1,
+                    $is_root,
                     $version,
+                    $depth + 1,
                     $content->content_id
                 );
+
                 if (count($children) > 0) {
                     $content->children = $children;
+                }
+
+                if ($is_root == false) {
+                    $documents = $this->db()
+                        ->select(['count(*) as documents', 'sum(hits) as hits'])
+                        ->from($this->table('documents'))
+                        ->where('content_id', $content->content_id);
+                    if ($version !== -1) {
+                        $documents->where('start_version', $version, '<=')->where('end_version', $version, '>');
+                    }
+                    $documents = $documents->groupBy('content_id')->getOne();
+                    $content->documents = $documents?->documents ?? 0;
+                    $content->hits = $documents?->hits ?? 0;
                 }
             }
         }
