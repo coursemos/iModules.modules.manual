@@ -409,6 +409,7 @@ namespace modules {
                         const manual_id = documents.getStore().getParam('manual_id');
                         const category_id = documents.getStore().getParam('category_id');
                         const content_id = documents.getStore().getParam('content_id');
+                        const has_version = documents.getStore().getParam('has_version') == 'TRUE';
 
                         new Aui.Window({
                             title:
@@ -425,6 +426,7 @@ namespace modules {
                                     items: [
                                         new Aui.Form.FieldSet({
                                             title: this.printText('admin.versions.versions'),
+                                            hidden: has_version == false,
                                             items: [
                                                 new Aui.Form.Field.Container({
                                                     combineValidate: true,
@@ -447,6 +449,7 @@ namespace modules {
                                                         new Aui.Form.Field.Check({
                                                             name: 'all_version',
                                                             boxLabel: this.printText('admin.versions.all_version'),
+                                                            checked: has_version == false,
                                                             listeners: {
                                                                 change: (field, value) => {
                                                                     const form = field.getForm();

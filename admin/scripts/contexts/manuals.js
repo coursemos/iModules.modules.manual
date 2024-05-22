@@ -300,7 +300,6 @@ Admin.ready(async () => {
                             const tree = field.getParent().getParent();
                             if (keyword.length > 0) {
                                 tree.getStore().setFilters({
-                                    context_id: { value: keyword, operator: 'likecode' },
                                     title: { value: keyword, operator: 'likecode' },
                                 }, 'OR');
                             }
@@ -439,11 +438,13 @@ Admin.ready(async () => {
                             const manual_id = selections[0].get('manual_id');
                             const category_id = selections[0].get('category_id');
                             const content_id = selections[0].get('content_id');
+                            const has_version = tree.getStore().getParam('has_version') == 'TRUE';
                             const version = tree.getStore().getParam('version') ?? -1;
                             documents.getStore().setParams({
                                 manual_id: manual_id,
                                 category_id: category_id,
                                 content_id: content_id,
+                                has_version: has_version == true ? 'TRUE' : 'FALSE',
                                 version: version,
                             });
                             documents.getStore().reload();
@@ -499,6 +500,9 @@ Admin.ready(async () => {
                         textAlign: 'center',
                         width: 70,
                         renderer: (value) => {
+                            if (value == -1) {
+                                return '*';
+                            }
                             return Math.floor(value / 1000) + '.' + (value % 1000);
                         },
                     },
@@ -508,6 +512,9 @@ Admin.ready(async () => {
                         textAlign: 'center',
                         width: 70,
                         renderer: (value) => {
+                            if (value == -1) {
+                                return '*';
+                            }
                             return Math.floor(value / 1000) + '.' + (value % 1000);
                         },
                     },
@@ -540,6 +547,12 @@ Admin.ready(async () => {
                     },
                 ],
                 listeners: {
+                    load: (grid) => {
+                        if (grid.getStore().getParam('has_version') == 'FALSE') {
+                            grid.getColumnByIndex(0).setHidden(true);
+                            grid.getColumnByIndex(1).setHidden(true);
+                        }
+                    },
                     openItem: (record) => {
                         me.documents.add(record.get('start_version'));
                     },
