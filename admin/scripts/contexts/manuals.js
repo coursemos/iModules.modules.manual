@@ -66,6 +66,7 @@ Admin.ready(async () => {
                 store: new Aui.Store.Remote({
                     url: me.getProcessUrl('manuals'),
                     primaryKeys: ['manual_id'],
+                    sorters: { title: 'ASC' },
                 }),
                 columns: [
                     {

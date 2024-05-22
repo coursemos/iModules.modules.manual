@@ -94,7 +94,16 @@ class Manual extends \modules\admin\admin\Component
             ->where('parent_id', $parent_id)
             ->orderBy('sort', 'asc')
             ->get();
-        foreach ($contents as &$content) {
+        foreach ($contents as $index => &$content) {
+            if ($index != $content->sort) {
+                $content->sort = $index;
+
+                $this->db()
+                    ->update($this->table('contents'), ['sort' => $index])
+                    ->where('content_id', $content->content_id)
+                    ->execute();
+            }
+
             if ($depth < $limit) {
                 $children = $this->getContents(
                     $manual_id,
