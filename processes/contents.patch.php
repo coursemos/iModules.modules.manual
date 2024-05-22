@@ -28,7 +28,7 @@ $records = Input::get('records') ?? [];
 foreach ($records as $record) {
     $me->db()
         ->update($me->table('contents'), (array) $record->updated)
-        ->where('content_id', $record->origin->manual_id)
+        ->where('content_id', $record->origin->content_id)
         ->execute();
 }
 
