@@ -114,7 +114,9 @@ Admin.ready(async () => {
                             Aui.getComponent('manuals-context').properties.setUrl();
                         }
                         else {
-                            categories.getStore().empty();
+                            if (categories.getStore().isLoaded() == true) {
+                                categories.getStore().empty();
+                            }
                             categories.disable();
                         }
                     },
@@ -275,7 +277,9 @@ Admin.ready(async () => {
                             Aui.getComponent('manuals-context').properties.setUrl();
                         }
                         else {
-                            contents.getStore().empty();
+                            if (contents.getStore().isLoaded() == true) {
+                                contents.getStore().empty();
+                            }
                             contents.disable();
                         }
                     },
@@ -454,7 +458,9 @@ Admin.ready(async () => {
                             Aui.getComponent('manuals-context').properties.setUrl();
                         }
                         else {
-                            documents.getStore().empty();
+                            if (documents.getStore().isLoaded() == true) {
+                                documents.getStore().empty();
+                            }
                             documents.disable();
                         }
                     },
