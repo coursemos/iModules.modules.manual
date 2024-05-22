@@ -50,6 +50,22 @@ class Manual extends \Module
     public function getContextConfigsFields(string $context): array
     {
         $fields = [];
+
+        $options = [
+            '#' => $this->getText('contexts.category'),
+        ];
+        foreach ($this->getManual($context)->getCategories() as $option) {
+            $options[$option->getId()] = $option->getTitle();
+        }
+        $category = [
+            'name' => 'category',
+            'label' => $this->getText('category'),
+            'type' => 'select',
+            'options' => $options,
+            'value' => '#',
+        ];
+        $fields[] = $category;
+
         $template = [
             'name' => 'template',
             'label' => $this->getText('template'),
@@ -75,19 +91,6 @@ class Manual extends \Module
      */
     public function getContext(string $manual_id, ?object $configs = null): string
     {
-        $content = $this->getManualContext($manual_id, $configs);
-        return $this->getTemplate()->getLayout($content);
-    }
-
-    /**
-     * 매뉴얼 컨텍스트를 가져온다.
-     *
-     * @param string $manual_id 매뉴얼고유값
-     * @param ?object $configs 컨텍스트 설정
-     * @return string $html
-     */
-    public function getManualContext(string $manual_id, ?object $configs = null): string
-    {
         $manual = $this->getManual($manual_id);
         if ($manual === null) {
             return \ErrorHandler::get($this->error('NOT_FOUND_MANUAL', $manual_id));
@@ -102,8 +105,48 @@ class Manual extends \Module
             $this->setTemplate($manual->getTemplateConfigs());
         }
 
+        $category_id ??= $this->getRouteAt(0) ?? ($configs?->category ?? '#');
+
+        if ($category_id == '#') {
+            $content = $this->getCategoryContext($manual_id);
+        } else {
+            $content = $this->getManualContext($manual_id, $category_id);
+        }
+
+        return $this->getTemplate()->getLayout($content);
+    }
+
+    /**
+     * 매뉴얼 분류를 선택하는 컨텍스트를 가져온다.
+     *
+     * @param string $manual_id 매뉴얼고유값
+     * @return string $html
+     */
+    public function getCategoryContext(string $manual_id): string
+    {
+        $manual = $this->getManual($manual_id);
         $categories = $manual->getCategories();
-        $category_id = $this->getRouteAt(0) ?? null;
+
+        $template = $this->getTemplate();
+        $template->assign('manual', $manual);
+        $template->assign('categories', $categories);
+
+        return $template->getContext('category');
+    }
+
+    /**
+     * 매뉴얼 컨텍스트를 가져온다.
+     *
+     * @param string $manual_id 매뉴얼고유값
+     * @param ?object $category_id 카테고리고유값
+     * @return string $html
+     */
+    public function getManualContext(string $manual_id, ?string $category_id = null): string
+    {
+        $manual = $this->getManual($manual_id);
+
+        $categories = $manual->getCategories();
+        $category_id ??= $this->getRouteAt(0) ?? null;
         if ($category_id === null) {
             if (count($categories) == 0) {
                 return \ErrorHandler::get($this->error('NOT_FOUND_MANUAL', $manual_id));
@@ -128,7 +171,7 @@ class Manual extends \Module
             }
         }
 
-        $content = $category->getContent($content_id);
+        $content = $content_id !== null ? $category->getContent($content_id) : null;
         if ($content === null) {
             return \ErrorHandler::get($this->error('NOT_FOUND_CONTENT', $manual_id));
         }

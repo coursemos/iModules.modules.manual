@@ -1,4 +1,8 @@
 {
+    "category": "분류",
+    "contexts": {
+        "category": "분류선택 컨텍스트"
+    },
     "admin": {
         "contexts": {
             "manuals": "매뉴얼관리"
