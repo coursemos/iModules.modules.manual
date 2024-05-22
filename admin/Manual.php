@@ -104,6 +104,19 @@ class Manual extends \modules\admin\admin\Component
                     ->execute();
             }
 
+            if ($is_root == false) {
+                $documents = $this->db()
+                    ->select(['count(*) as documents', 'sum(hits) as hits'])
+                    ->from($this->table('documents'))
+                    ->where('content_id', $content->content_id);
+                if ($version !== -1) {
+                    $documents->where('start_version', $version, '<=')->where('end_version', $version, '>');
+                }
+                $documents = $documents->groupBy('content_id')->getOne();
+                $content->documents = $documents?->documents ?? 0;
+                $content->hits = $documents?->hits ?? 0;
+            }
+
             if ($depth < $limit) {
                 $children = $this->getContents(
                     $manual_id,
@@ -116,19 +129,6 @@ class Manual extends \modules\admin\admin\Component
 
                 if (count($children) > 0) {
                     $content->children = $children;
-                }
-
-                if ($is_root == false) {
-                    $documents = $this->db()
-                        ->select(['count(*) as documents', 'sum(hits) as hits'])
-                        ->from($this->table('documents'))
-                        ->where('content_id', $content->content_id);
-                    if ($version !== -1) {
-                        $documents->where('start_version', $version, '<=')->where('end_version', $version, '>');
-                    }
-                    $documents = $documents->groupBy('content_id')->getOne();
-                    $content->documents = $documents?->documents ?? 0;
-                    $content->hits = $documents?->hits ?? 0;
                 }
             }
         }

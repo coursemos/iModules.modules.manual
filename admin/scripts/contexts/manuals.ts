@@ -359,6 +359,7 @@ Admin.ready(async () => {
                     new Aui.Button({
                         iconClass: 'mi mi-caret-down',
                         handler: async (button) => {
+                            button.setLoading(true);
                             const tree = button.getParent().getParent() as Aui.Tree.Panel;
                             tree.moveSelections('down');
 
