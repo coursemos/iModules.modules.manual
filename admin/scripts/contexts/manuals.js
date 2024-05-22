@@ -114,6 +114,7 @@ Admin.ready(async () => {
                             Aui.getComponent('manuals-context').properties.setUrl();
                         }
                         else {
+                            categories.getStore().empty();
                             categories.disable();
                         }
                     },
@@ -274,6 +275,7 @@ Admin.ready(async () => {
                             Aui.getComponent('manuals-context').properties.setUrl();
                         }
                         else {
+                            contents.getStore().empty();
                             contents.disable();
                         }
                     },
@@ -452,6 +454,7 @@ Admin.ready(async () => {
                             Aui.getComponent('manuals-context').properties.setUrl();
                         }
                         else {
+                            documents.getStore().empty();
                             documents.disable();
                         }
                     },

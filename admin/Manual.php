@@ -127,6 +127,125 @@ class Manual extends \modules\admin\admin\Component
     }
 
     /**
+     * 매뉴얼을 삭제한다.
+     *
+     * @param string $manual_id 매뉴얼고유값
+     * @return bool $success
+     */
+    public function deleteManual(string $manual_id): bool
+    {
+        $manual = $this->db()
+            ->select()
+            ->from($this->table('manuals'))
+            ->where('manual_id', $manual_id)
+            ->getOne();
+        if ($manual === null) {
+            return false;
+        }
+
+        $categories = $this->db()
+            ->select()
+            ->from($this->table('categories'))
+            ->where('manual_id', $manual_id)
+            ->get();
+        foreach ($categories as $category) {
+            $this->deleteCategory($category->manual_id, $category->category_id);
+        }
+
+        $this->db()
+            ->delete($this->table('manuals'))
+            ->where('manual_id', $manual_id)
+            ->execute();
+
+        return true;
+    }
+
+    /**
+     * 분류를 삭제한다.
+     *
+     * @param string $manual_id 매뉴얼고유값
+     * @param string $category_id 분류고유값
+     * @return bool $success
+     */
+    public function deleteCategory(string $manual_id, string $category_id): bool
+    {
+        $category = $this->db()
+            ->select()
+            ->from($this->table('categories'))
+            ->where('manual_id', $manual_id)
+            ->where('category_id', $category_id)
+            ->getOne();
+        if ($category === null) {
+            return false;
+        }
+
+        $contents = $this->db()
+            ->select()
+            ->from($this->table('contents'))
+            ->where('manual_id', $manual_id)
+            ->where('category_id', $category_id)
+            ->where('parent_id', null)
+            ->get();
+        foreach ($contents as $content) {
+            $this->deleteContent($content->content_id);
+        }
+
+        $this->db()
+            ->delete($this->table('categories'))
+            ->where('manual_id', $manual_id)
+            ->where('category_id', $category_id)
+            ->execute();
+
+        return true;
+    }
+
+    /**
+     * 목차를 삭제한다.
+     *
+     * @param string $content_id 목차고유값
+     * @return bool $success
+     */
+    public function deleteContent(string $content_id): bool
+    {
+        $content = $this->db()
+            ->select()
+            ->from($this->table('contents'))
+            ->where('content_id', $content_id)
+            ->getOne();
+        if ($content === null) {
+            return false;
+        }
+
+        /**
+         * 자식목차를 삭제한다.
+         */
+        $children = $this->db()
+            ->select()
+            ->from($this->table('contents'))
+            ->where('parent_id', $content_id)
+            ->get();
+        foreach ($children as $child) {
+            $this->deleteContent($child->content_id);
+        }
+
+        $documents = $this->db()
+            ->select()
+            ->from($this->table('documents'))
+            ->where('content_id', $content_id)
+            ->get();
+        foreach ($documents as $document) {
+            $this->deleteDocument($document->content_id, $document->start_version);
+        }
+
+        $this->db()
+            ->delete($this->table('contents'))
+            ->where('content_id', $content_id)
+            ->execute();
+
+        return true;
+    }
+
+    /**
      * 문서를 삭제한다.
      *
      * @param string $content_id 목차고유값
