@@ -61,7 +61,7 @@ class Manual extends \modules\admin\admin\Component
             ->addChild('manuals', $this->getText('admin.scopes.manuals'))
             ->addChild('categories', $this->getText('admin.scopes.categories'))
             ->addChild('contents', $this->getText('admin.scopes.contents'))
-            ->addChild('pages', $this->getText('admin.scopes.pages'));
+            ->addChild('documents', $this->getText('admin.scopes.documents'));
 
         return $this->setScopes($scopes);
     }
@@ -73,6 +73,7 @@ class Manual extends \modules\admin\admin\Component
      * @param string $category_id 분류고유값
      * @param bool $is_root 최상위 그룹 여부
      * @param ?string $version 버전명
+     * @param int $depth 단계
      * @param ?string $parent_id 상위목차고유값
      */
     public function getContents(

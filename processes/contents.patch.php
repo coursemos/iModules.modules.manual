@@ -2,9 +2,9 @@
 /**
  * 이 파일은 아이모듈 매뉴얼모듈의 일부입니다. (https://www.imodules.io)
  *
- * 분류 정렬을 저장한다.
+ * 목차 정렬을 저장한다.
  *
- * @file /modules/manual/processes/categories.patch.php
+ * @file /modules/manual/processes/contents.patch.php
  * @author Arzz <arzz@arzz.com>
  * @license MIT License
  * @modified 2024. 5. 11.
@@ -18,7 +18,7 @@ if (defined('__IM_PROCESS__') == false) {
 /**
  * 관리자권한이 존재하는지 확인한다.
  */
-if ($me->getAdmin()->checkPermission('manuals', ['categories']) == false) {
+if ($me->getAdmin()->checkPermission('manuals', ['contents']) == false) {
     $results->success = false;
     $results->message = $me->getErrorText('FORBIDDEN');
     return;
@@ -27,9 +27,8 @@ if ($me->getAdmin()->checkPermission('manuals', ['categories']) == false) {
 $records = Input::get('records') ?? [];
 foreach ($records as $record) {
     $me->db()
-        ->update($me->table('categories'), (array) $record->updated)
-        ->where('manual_id', $record->origin->manual_id)
-        ->where('category_id', $record->origin->category_id)
+        ->update($me->table('contents'), (array) $record->updated)
+        ->where('content_id', $record->origin->manual_id)
         ->execute();
 }
 
