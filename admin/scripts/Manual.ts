@@ -580,12 +580,10 @@ namespace modules {
                     /**
                      * 선택한 문서를 삭제한다.
                      *
+                     * @param {string} content_id - 목차고유값
                      * @param {number} start_version - 문서최소버전
                      */
-                    delete: (start_version: number): void => {
-                        const documents = Aui.getComponent('documents') as Aui.Tree.Panel;
-                        const content_id = documents.getStore().getParam('content_id');
-
+                    delete: (content_id: string, start_version: number): void => {
                         Aui.Message.delete({
                             url: this.getProcessUrl('documents'),
                             params: { content_id: content_id, start_version: start_version },

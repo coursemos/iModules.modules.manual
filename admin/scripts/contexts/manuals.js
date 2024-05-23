@@ -588,7 +588,7 @@ Admin.ready(async () => {
                             text: me.printText('admin.documents.delete'),
                             iconClass: 'mi mi-trash',
                             handler: async () => {
-                                me.documents.delete(record.get('start_version'));
+                                me.documents.delete(record.get('content_id'), record.get('start_version'));
                                 return true;
                             },
                         });

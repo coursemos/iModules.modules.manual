@@ -157,13 +157,14 @@ class Manual extends \Module
 
         $category = $this->getCategory($manual_id, $category_id);
         if ($category === null) {
-            return \ErrorHandler::get($this->error('NOT_FOUND_CATEGORY', $manual_id));
+            return \ErrorHandler::get($this->error('NOT_FOUND_CATEGORY', $category_id));
         }
 
         $contents = $category->getContents();
         $content_id = $this->getRouteAt(1) ?? null;
         if ($content_id === null) {
             foreach ($contents as $content) {
+                echo $content->getId() . '=> ' . $category->getLatestVersion() . '<br>';
                 if ($content->isVisible($category->getLatestVersion()) == true) {
                     $content_id = $content->getId();
                     break;
@@ -173,7 +174,7 @@ class Manual extends \Module
 
         $content = $content_id !== null ? $category->getContent($content_id) : null;
         if ($content === null) {
-            return \ErrorHandler::get($this->error('NOT_FOUND_CONTENT', $manual_id));
+            return \ErrorHandler::get($this->error('NOT_FOUND_CONTENT'));
         }
 
         $versions = $category->getVersions();
@@ -303,6 +304,16 @@ class Manual extends \Module
             case 'NOT_FOUND_MANUAL':
                 $error = \ErrorHandler::data($code, $this);
                 $error->message = $this->getErrorText('NOT_FOUND_MANUAL', ['manual_id' => $message]);
+                return $error;
+
+            case 'NOT_FOUND_CATEGORY':
+                $error = \ErrorHandler::data($code, $this);
+                $error->message = $this->getErrorText('NOT_FOUND_CATEGORY', ['category_id' => $message]);
+                return $error;
+
+            case 'NOT_FOUND_CONTENT':
+                $error = \ErrorHandler::data($code, $this);
+                $error->message = $this->getErrorText('NOT_FOUND_CONTENT');
                 return $error;
 
             /**
