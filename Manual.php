@@ -164,7 +164,6 @@ class Manual extends \Module
         $content_id = $this->getRouteAt(1) ?? null;
         if ($content_id === null) {
             foreach ($contents as $content) {
-                echo $content->getId() . '=> ' . $category->getLatestVersion() . '<br>';
                 if ($content->isVisible($category->getLatestVersion()) == true) {
                     $content_id = $content->getId();
                     break;
@@ -190,6 +189,9 @@ class Manual extends \Module
         }
 
         $document = $content->getDocument($version);
+        if ($document === null) {
+            return \ErrorHandler::get($this->error('NOT_FOUND_DOCUMENT', $manual_id));
+        }
 
         $template = $this->getTemplate();
         $template->assign('manual', $manual);
@@ -314,6 +316,11 @@ class Manual extends \Module
             case 'NOT_FOUND_CONTENT':
                 $error = \ErrorHandler::data($code, $this);
                 $error->message = $this->getErrorText('NOT_FOUND_CONTENT');
+                return $error;
+
+            case 'NOT_FOUND_DOCUMENT':
+                $error = \ErrorHandler::data($code, $this);
+                $error->message = $this->getErrorText('NOT_FOUND_DOCUMENT');
                 return $error;
 
             /**
