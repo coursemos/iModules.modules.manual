@@ -54,6 +54,7 @@ var modules;
                                         new Aui.Form.Field.Permission({
                                             name: 'permission',
                                             label: this.printText('admin.permission'),
+                                            url: this.getProcessUrl('permissions'),
                                             value: 'true',
                                         }),
                                     ],
@@ -164,6 +165,7 @@ var modules;
                                         new Aui.Form.Field.Permission({
                                             name: 'permission',
                                             label: this.printText('admin.permission'),
+                                            url: this.getProcessUrl('permissions'),
                                             value: 'true',
                                         }),
                                         new Aui.Form.Field.Check({
@@ -306,6 +308,7 @@ var modules;
                                         new Aui.Form.Field.Permission({
                                             name: 'permission',
                                             label: this.printText('admin.permission'),
+                                            url: this.getProcessUrl('permissions'),
                                             value: 'true',
                                         }),
                                     ],
