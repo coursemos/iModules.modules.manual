@@ -49,7 +49,7 @@ namespace modules {
                                             componentName: 'manual',
                                             allowBlank: false,
                                         }),
-                                        new AdminUi.Form.Field.Permission({
+                                        new Aui.Form.Field.Permission({
                                             name: 'permission',
                                             label: this.printText('admin.permission'),
                                             value: 'true',
@@ -164,7 +164,7 @@ namespace modules {
                                             label: this.printText('admin.categories.title'),
                                             allowBlank: false,
                                         }),
-                                        new AdminUi.Form.Field.Permission({
+                                        new Aui.Form.Field.Permission({
                                             name: 'permission',
                                             label: this.printText('admin.permission'),
                                             value: 'true',
@@ -312,7 +312,7 @@ namespace modules {
                                             valueField: 'content_id',
                                             value: '@',
                                         }),
-                                        new AdminUi.Form.Field.Permission({
+                                        new Aui.Form.Field.Permission({
                                             name: 'permission',
                                             label: this.printText('admin.permission'),
                                             value: 'true',
