@@ -54,7 +54,7 @@ var modules;
                                         new Aui.Form.Field.Permission({
                                             name: 'permission',
                                             label: this.printText('admin.permission'),
-                                            url: this.getProcessUrl('permissions'),
+                                            url: Admin.getModule('admin').getProcessUrl('permissions'),
                                             value: 'true',
                                         }),
                                     ],
@@ -80,7 +80,7 @@ var modules;
                                         });
                                         if (results.success == true) {
                                             Aui.Message.show({
-                                                title: (await Admin.getText('info')),
+                                                title: Aui.getErrorText('INFO'),
                                                 message: Aui.printText('actions.saved'),
                                                 icon: Aui.Message.INFO,
                                                 buttons: Aui.Message.OK,
@@ -210,7 +210,7 @@ var modules;
                                         });
                                         if (results.success == true) {
                                             Aui.Message.show({
-                                                title: (await Admin.getText('info')),
+                                                title: Aui.getErrorText('INFO'),
                                                 message: Aui.printText('actions.saved'),
                                                 icon: Aui.Message.INFO,
                                                 buttons: Aui.Message.OK,
@@ -338,7 +338,7 @@ var modules;
                                         });
                                         if (results.success == true) {
                                             Aui.Message.show({
-                                                title: (await Admin.getText('info')),
+                                                title: Aui.getErrorText('INFO'),
                                                 message: Aui.printText('actions.saved'),
                                                 icon: Aui.Message.INFO,
                                                 buttons: Aui.Message.OK,
@@ -527,7 +527,7 @@ var modules;
                                         });
                                         if (results.success == true) {
                                             Aui.Message.show({
-                                                title: (await Admin.getText('info')),
+                                                title: Aui.getErrorText('INFO'),
                                                 message: Aui.printText('actions.saved'),
                                                 icon: Aui.Message.INFO,
                                                 buttons: Aui.Message.OK,
