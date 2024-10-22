@@ -6,7 +6,7 @@
  * @file /modules/manual/admin/scripts/contexts/manuals.ts
  * @author Arzz <arzz@arzz.com>
  * @license MIT License
- * @modified 2024. 4. 23.
+ * @modified 2024. 10. 22.
  */
 Admin.ready(async () => {
     const me = Admin.getModule('manual');
@@ -15,7 +15,7 @@ Admin.ready(async () => {
         border: false,
         layout: 'column',
         iconClass: 'xi xi-tagged-book',
-        title: (await me.getText('admin.contexts.manuals')),
+        title: await me.getText('admin.contexts.manuals'),
         scrollable: true,
         items: [
             new Aui.Grid.Panel({
@@ -31,7 +31,7 @@ Admin.ready(async () => {
                     new Aui.Form.Field.Search({
                         name: 'keyword',
                         flex: 1,
-                        emptyText: (await me.getText('keyword')),
+                        emptyText: await me.getText('keyword'),
                         liveSearch: true,
                         handler: async (keyword, field) => {
                             const grid = field.getParent().getParent();
@@ -48,7 +48,7 @@ Admin.ready(async () => {
                     }),
                     new Aui.Button({
                         iconClass: 'mi mi-plus',
-                        text: (await me.getText('admin.manuals.add')),
+                        text: await me.getText('admin.manuals.add'),
                         handler: () => {
                             me.manuals.add();
                         },
@@ -70,7 +70,7 @@ Admin.ready(async () => {
                 }),
                 columns: [
                     {
-                        text: (await me.getText('admin.manuals.title')),
+                        text: await me.getText('admin.manuals.title'),
                         dataIndex: 'title',
                     },
                 ],
@@ -138,7 +138,7 @@ Admin.ready(async () => {
                     new Aui.Form.Field.Search({
                         name: 'keyword',
                         flex: 1,
-                        emptyText: (await me.getText('keyword')),
+                        emptyText: await me.getText('keyword'),
                         liveSearch: true,
                         handler: async (keyword, field) => {
                             const grid = field.getParent().getParent();
@@ -155,7 +155,7 @@ Admin.ready(async () => {
                     }),
                     new Aui.Button({
                         iconClass: 'mi mi-plus',
-                        text: (await me.getText('admin.categories.add')),
+                        text: await me.getText('admin.categories.add'),
                         handler: () => {
                             me.categories.add();
                         },
@@ -199,7 +199,7 @@ Admin.ready(async () => {
                 }),
                 columns: [
                     {
-                        text: (await me.getText('admin.categories.title')),
+                        text: await me.getText('admin.categories.title'),
                         dataIndex: 'title',
                         renderer: (value, record) => {
                             let sHTML = '';
@@ -301,7 +301,7 @@ Admin.ready(async () => {
                     new Aui.Form.Field.Search({
                         name: 'keyword',
                         width: 200,
-                        emptyText: (await me.getText('keyword')),
+                        emptyText: await me.getText('keyword'),
                         liveSearch: true,
                         handler: async (keyword, field) => {
                             const tree = field.getParent().getParent();
@@ -318,7 +318,7 @@ Admin.ready(async () => {
                     '->',
                     new Aui.Button({
                         iconClass: 'mi mi-plus',
-                        text: (await me.getText('admin.contents.add')),
+                        text: await me.getText('admin.contents.add'),
                         handler: () => {
                             me.contents.add();
                         },
@@ -382,12 +382,12 @@ Admin.ready(async () => {
                 }),
                 columns: [
                     {
-                        text: (await me.getText('admin.contents.title')),
+                        text: await me.getText('admin.contents.title'),
                         dataIndex: 'title',
                         flex: 1,
                     },
                     {
-                        text: (await me.getText('admin.contents.documents')),
+                        text: await me.getText('admin.contents.documents'),
                         dataIndex: 'documents',
                         width: 60,
                         textAlign: 'right',
@@ -396,7 +396,7 @@ Admin.ready(async () => {
                         },
                     },
                     {
-                        text: (await me.getText('admin.contents.hits')),
+                        text: await me.getText('admin.contents.hits'),
                         dataIndex: 'hits',
                         width: 75,
                         textAlign: 'right',
@@ -480,7 +480,7 @@ Admin.ready(async () => {
                 topbar: [
                     new Aui.Button({
                         iconClass: 'mi mi-plus',
-                        text: (await me.getText('admin.documents.add')),
+                        text: await me.getText('admin.documents.add'),
                         handler: () => {
                             me.documents.add();
                         },
@@ -506,7 +506,7 @@ Admin.ready(async () => {
                 }),
                 columns: [
                     {
-                        text: (await me.getText('admin.documents.start_version')),
+                        text: await me.getText('admin.documents.start_version'),
                         dataIndex: 'start_version',
                         textAlign: 'center',
                         width: 70,
@@ -518,7 +518,7 @@ Admin.ready(async () => {
                         },
                     },
                     {
-                        text: (await me.getText('admin.documents.end_version')),
+                        text: await me.getText('admin.documents.end_version'),
                         dataIndex: 'end_version',
                         textAlign: 'center',
                         width: 70,
@@ -530,7 +530,7 @@ Admin.ready(async () => {
                         },
                     },
                     {
-                        text: (await me.getText('admin.documents.author')),
+                        text: await me.getText('admin.documents.author'),
                         dataIndex: 'author',
                         minWidth: 120,
                         flex: 1,
@@ -539,7 +539,7 @@ Admin.ready(async () => {
                         },
                     },
                     {
-                        text: (await me.getText('admin.documents.updated_at')),
+                        text: await me.getText('admin.documents.updated_at'),
                         dataIndex: 'updated_at',
                         width: 145,
                         textAlign: 'center',
@@ -548,7 +548,7 @@ Admin.ready(async () => {
                         },
                     },
                     {
-                        text: (await me.getText('admin.documents.hits')),
+                        text: await me.getText('admin.documents.hits'),
                         dataIndex: 'hits',
                         width: 75,
                         textAlign: 'right',
