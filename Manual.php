@@ -5,9 +5,9 @@
  * 매뉴얼모듈 클래스를 정의한다.
  *
  * @file /modules/manual/Manual.php
- * @author Arzz <arzz@arzz.com>
+ * @author sungjin <esung246@naddle.net>
  * @license MIT License
- * @modified 2024. 5. 11.
+ * @modified 2025. 3. 19.
  */
 namespace modules\manual;
 class Manual extends \Module
@@ -339,7 +339,7 @@ class Manual extends \Module
             case 'FORBIDDEN':
                 $error = \ErrorHandler::data($code, $this);
                 /**
-                 * @var ModuleMember $mMember
+                 * @var \modules\member\Member $mMember
                  */
                 $mMember = \Modules::get('member');
                 if ($mMember->isLogged() == true) {
